@@ -14,12 +14,32 @@
     },
     {
       "name": "speed",
-      "type": "enum",
+      "type": "dropdown",
       "values": [
-        "auto",
-        "low",
-        "medium",
-        "high"
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto"
+          }
+        },
+        {
+          "id": "low",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "medium",
+          "title": {
+            "en": "Medium"
+          }
+        },
+        {
+          "id": "high",
+          "title": {
+            "en": "High"
+          }
+        }
       ]
     }
   ]
