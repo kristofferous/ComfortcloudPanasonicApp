@@ -3,6 +3,9 @@
   "title": {
     "en": "Indoor temperature is above"
   },
+  "titleFormatted": {
+    "en": "Indoor temperature of [[device]] is above [[temperature]] °C"
+  },
   "args": [
     {
       "name": "device",

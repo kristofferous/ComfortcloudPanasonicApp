@@ -4,7 +4,7 @@
     "en": "Set fan speed"
   },
   "titleFormatted": {
-    "en": "Set [[device]] fan speed to [[speed]]"
+    "en": "Set fan speed of [[device]] to [[speed]]"
   },
   "args": [
     {

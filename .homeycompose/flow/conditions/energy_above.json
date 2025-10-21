@@ -3,6 +3,9 @@
   "title": {
     "en": "Energy consumption is above"
   },
+  "titleFormatted": {
+    "en": "Energy consumption of [[device]] is above [[energy]] kWh"
+  },
   "args": [
     {
       "name": "device",

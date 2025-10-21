@@ -4,7 +4,7 @@
     "en": "Set target temperature"
   },
   "titleFormatted": {
-    "en": "Set [[device]] target temperature to [[temperature]] °C"
+    "en": "Set target temperature of [[device]] to [[temperature]] °C"
   },
   "args": [
     {

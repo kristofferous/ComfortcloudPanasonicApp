@@ -4,7 +4,7 @@
     "en": "Set swing mode"
   },
   "titleFormatted": {
-    "en": "Set [[device]] swing mode to [[mode]]"
+    "en": "Set swing mode of [[device]] to [[mode]]"
   },
   "args": [
     {

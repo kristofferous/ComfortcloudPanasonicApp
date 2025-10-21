@@ -4,7 +4,7 @@
     "en": "State changed"
   },
   "titleFormatted": {
-    "en": "[[device]] changed [[property]]"
+    "en": "[[device]] changed [[property]] to [[value]]"
   },
   "args": [
     {
