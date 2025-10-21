@@ -6,46 +6,10 @@
   "class": "thermostat",
   "capabilities": [
     "onoff",
-    "thermostat_mode",
     "target_temperature",
-    "measure_temperature"
+    "measure_temperature",
+    "thermostat_mode"
   ],
-  "capabilitiesOptions": {
-    "thermostat_mode": {
-      "values": [
-        {
-          "id": "auto",
-          "title": {
-            "en": "Auto"
-          }
-        },
-        {
-          "id": "cool",
-          "title": {
-            "en": "Cool"
-          }
-        },
-        {
-          "id": "heat",
-          "title": {
-            "en": "Heat"
-          }
-        },
-        {
-          "id": "dry",
-          "title": {
-            "en": "Dry"
-          }
-        },
-        {
-          "id": "fan",
-          "title": {
-            "en": "Fan"
-          }
-        }
-      ]
-    }
-  },
   "images": {
     "small": "/drivers/panasonic-ac/assets/icon.svg",
     "large": "/drivers/panasonic-ac/assets/icon.svg"
@@ -58,18 +22,6 @@
     {
       "id": "devices",
       "template": "devices"
-    }
-  ],
-  "settings": [
-    {
-      "id": "rescanDevices",
-      "type": "button",
-      "label": {
-        "en": "Rescan devices"
-      },
-      "hint": {
-        "en": "Discover Comfort Cloud devices again using the stored account credentials."
-      }
     }
   ]
 }
