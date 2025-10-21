@@ -1,0 +1,23 @@
+{
+  "id": "temperature_above",
+  "title": {
+    "en": "Indoor temperature is above"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=panasonic-ac"
+    },
+    {
+      "name": "temperature",
+      "type": "number",
+      "min": -20,
+      "max": 60,
+      "step": 0.5,
+      "label": {
+        "en": "Temperature (°C)"
+      }
+    }
+  ]
+}

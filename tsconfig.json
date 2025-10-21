@@ -1,7 +1,28 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "allowJs": true,
-    "outDir": ".homeybuild/"
-  }
+    "outDir": ".homeybuild/",
+    "rootDir": ".",
+    "allowJs": false,
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ]
+  },
+  "include": [
+    "app.ts",
+    "drivers/**/*.ts",
+    "lib/**/*.ts",
+    "polling/**/*.ts",
+    "types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".homeybuild",
+    "tests"
+  ]
 }

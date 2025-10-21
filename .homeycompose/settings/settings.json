@@ -1,0 +1,101 @@
+[
+  {
+    "type": "group",
+    "label": {
+      "en": "Comfort Cloud account"
+    },
+    "items": [
+      {
+        "id": "accountEmail",
+        "type": "text",
+        "label": {
+          "en": "Email"
+        },
+        "placeholder": {
+          "en": "user@example.com"
+        }
+      },
+      {
+        "id": "accountPassword",
+        "type": "password",
+        "label": {
+          "en": "Password"
+        },
+        "hint": {
+          "en": "Stored securely and never logged."
+        }
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Polling intervals"
+    },
+    "items": [
+      {
+        "id": "pollEssential",
+        "type": "number",
+        "label": {
+          "en": "Essential state (seconds)"
+        },
+        "value": 75,
+        "min": 30,
+        "max": 300
+      },
+      {
+        "id": "pollEnvironment",
+        "type": "number",
+        "label": {
+          "en": "Indoor sensors (seconds)"
+        },
+        "value": 120,
+        "min": 60,
+        "max": 600
+      },
+      {
+        "id": "pollExtended",
+        "type": "number",
+        "label": {
+          "en": "Outdoor & energy (minutes)"
+        },
+        "value": 15,
+        "min": 5,
+        "max": 60
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Maintenance"
+    },
+    "items": [
+      {
+        "id": "rescanDevices",
+        "type": "button",
+        "label": {
+          "en": "Rescan devices"
+        },
+        "hint": {
+          "en": "Trigger device discovery again using the configured account."
+        }
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Diagnostics"
+    },
+    "items": [
+      {
+        "id": "debugLogging",
+        "type": "checkbox",
+        "label": {
+          "en": "Enable debug logging"
+        }
+      }
+    ]
+  }
+]

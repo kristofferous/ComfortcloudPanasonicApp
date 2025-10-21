@@ -1,0 +1,27 @@
+{
+  "id": "panasonic-ac",
+  "name": {
+    "en": "Panasonic Comfort Cloud"
+  },
+  "class": "thermostat",
+  "capabilities": [
+    "onoff",
+    "target_temperature",
+    "measure_temperature",
+    "thermostat_mode"
+  ],
+  "images": {
+    "small": "/drivers/panasonic-ac/assets/icon.svg",
+    "large": "/drivers/panasonic-ac/assets/icon.svg"
+  },
+  "pair": [
+    {
+      "id": "login",
+      "template": "login"
+    },
+    {
+      "id": "devices",
+      "template": "devices"
+    }
+  ]
+}
