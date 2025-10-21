@@ -89,7 +89,7 @@
             "min": 0,
             "max": 500,
             "step": 0.1,
-            "label": {
+            "title": {
               "en": "Energy (kWh)"
             }
           }
@@ -121,13 +121,38 @@
           },
           {
             "name": "mode",
-            "type": "enum",
+            "type": "dropdown",
             "values": [
-              "auto",
-              "cool",
-              "heat",
-              "dry",
-              "fan"
+              {
+                "id": "auto",
+                "title": {
+                  "en": "Auto"
+                }
+              },
+              {
+                "id": "cool",
+                "title": {
+                  "en": "Cool"
+                }
+              },
+              {
+                "id": "heat",
+                "title": {
+                  "en": "Heat"
+                }
+              },
+              {
+                "id": "dry",
+                "title": {
+                  "en": "Dry"
+                }
+              },
+              {
+                "id": "fan",
+                "title": {
+                  "en": "Fan"
+                }
+              }
             ]
           }
         ]
@@ -149,7 +174,7 @@
             "min": -20,
             "max": 60,
             "step": 0.5,
-            "label": {
+            "title": {
               "en": "Temperature (°C)"
             }
           }
@@ -173,12 +198,32 @@
           },
           {
             "name": "speed",
-            "type": "enum",
+            "type": "dropdown",
             "values": [
-              "auto",
-              "low",
-              "medium",
-              "high"
+              {
+                "id": "auto",
+                "title": {
+                  "en": "Auto"
+                }
+              },
+              {
+                "id": "low",
+                "title": {
+                  "en": "Low"
+                }
+              },
+              {
+                "id": "medium",
+                "title": {
+                  "en": "Medium"
+                }
+              },
+              {
+                "id": "high",
+                "title": {
+                  "en": "High"
+                }
+              }
             ]
           }
         ]
@@ -199,13 +244,38 @@
           },
           {
             "name": "mode",
-            "type": "enum",
+            "type": "dropdown",
             "values": [
-              "auto",
-              "cool",
-              "heat",
-              "dry",
-              "fan"
+              {
+                "id": "auto",
+                "title": {
+                  "en": "Auto"
+                }
+              },
+              {
+                "id": "cool",
+                "title": {
+                  "en": "Cool"
+                }
+              },
+              {
+                "id": "heat",
+                "title": {
+                  "en": "Heat"
+                }
+              },
+              {
+                "id": "dry",
+                "title": {
+                  "en": "Dry"
+                }
+              },
+              {
+                "id": "fan",
+                "title": {
+                  "en": "Fan"
+                }
+              }
             ]
           }
         ]
@@ -226,10 +296,21 @@
           },
           {
             "name": "state",
-            "type": "boolean",
-            "title": {
-              "en": "Turn on"
-            }
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "On"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off"
+                }
+              }
+            ]
           }
         ]
       },
@@ -249,12 +330,32 @@
           },
           {
             "name": "mode",
-            "type": "enum",
+            "type": "dropdown",
             "values": [
-              "off",
-              "vertical",
-              "horizontal",
-              "both"
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off"
+                }
+              },
+              {
+                "id": "vertical",
+                "title": {
+                  "en": "Vertical"
+                }
+              },
+              {
+                "id": "horizontal",
+                "title": {
+                  "en": "Horizontal"
+                }
+              },
+              {
+                "id": "both",
+                "title": {
+                  "en": "Vertical & horizontal"
+                }
+              }
             ]
           }
         ]
@@ -279,7 +380,7 @@
             "min": 10,
             "max": 30,
             "step": 0.5,
-            "label": {
+            "title": {
               "en": "Temperature (°C)"
             }
           }

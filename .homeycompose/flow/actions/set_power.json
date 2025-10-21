@@ -14,10 +14,21 @@
     },
     {
       "name": "state",
-      "type": "boolean",
-      "title": {
-        "en": "Turn on"
-      }
+      "type": "dropdown",
+      "values": [
+        {
+          "id": "on",
+          "title": {
+            "en": "On"
+          }
+        },
+        {
+          "id": "off",
+          "title": {
+            "en": "Off"
+          }
+        }
+      ]
     }
   ]
 }

@@ -14,12 +14,32 @@
     },
     {
       "name": "mode",
-      "type": "enum",
+      "type": "dropdown",
       "values": [
-        "off",
-        "vertical",
-        "horizontal",
-        "both"
+        {
+          "id": "off",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "vertical",
+          "title": {
+            "en": "Vertical"
+          }
+        },
+        {
+          "id": "horizontal",
+          "title": {
+            "en": "Horizontal"
+          }
+        },
+        {
+          "id": "both",
+          "title": {
+            "en": "Vertical & horizontal"
+          }
+        }
       ]
     }
   ]
