@@ -216,7 +216,7 @@ export function buildCapabilityPlan(device: ComfortDevice): CapabilityPlan {
     capabilities.add('measure_humidity');
   }
   if (device.features.supportsOutdoorTemperature) {
-    capabilities.add('measure_temperature.outdoor');
+    capabilities.add('measure_temperature_outdoor');
   }
   if (device.features.supportsEnergyMonitoring) {
     capabilities.add('measure_power');

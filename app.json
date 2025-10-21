@@ -473,14 +473,12 @@
         }
       ]
     },
-    "measure_temperature.outdoor": {
+    "measure_temperature_outdoor": {
       "type": "number",
       "title": {
         "en": "Outdoor temperature"
       },
-      "units": {
-        "en": "°C"
-      },
+      "units": "°C",
       "decimals": 1,
       "min": -40,
       "max": 60,

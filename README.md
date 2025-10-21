@@ -49,7 +49,7 @@ Unofficial Homey SDK v3 integration for Panasonic Comfort Cloud. Discover, contr
 | `target_temperature` | Desired room temperature |
 | `measure_temperature` | Current indoor temperature |
 | `measure_humidity` | Indoor humidity (if available) |
-| `measure_temperature.outdoor` | Outdoor temperature reported by the unit |
+| `measure_temperature_outdoor` | Outdoor temperature reported by the unit |
 | `fan_speed` | Auto/low/medium/high fan speed |
 | `swing_mode` | Louver swing: off, vertical, horizontal or both |
 | `measure_power` & `meter_power` | Instantaneous and cumulative energy, when supported |

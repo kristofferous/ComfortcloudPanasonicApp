@@ -66,7 +66,7 @@ describe('Mappers', () => {
   it('builds capabilities based on features', () => {
     const device = mapDevice(rawDevice);
     const plan = buildCapabilityPlan(device as ComfortDevice);
-    expect(plan.capabilities).toContain('measure_temperature.outdoor');
+    expect(plan.capabilities).toContain('measure_temperature_outdoor');
     expect(plan.capabilities).toContain('fan_speed');
     expect(plan.capabilities).toContain('meter_power');
   });
