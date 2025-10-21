@@ -1,0 +1,26 @@
+{
+  "id": "set_fan_speed",
+  "title": {
+    "en": "Set fan speed"
+  },
+  "titleFormatted": {
+    "en": "Set [[device]] fan speed to [[speed]]"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=panasonic-ac"
+    },
+    {
+      "name": "speed",
+      "type": "enum",
+      "values": [
+        "auto",
+        "low",
+        "medium",
+        "high"
+      ]
+    }
+  ]
+}

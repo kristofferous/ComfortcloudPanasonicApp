@@ -1,0 +1,23 @@
+{
+  "id": "set_power",
+  "title": {
+    "en": "Set power"
+  },
+  "titleFormatted": {
+    "en": "Set [[device]] to [[state]]"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=panasonic-ac"
+    },
+    {
+      "name": "state",
+      "type": "boolean",
+      "title": {
+        "en": "Turn on"
+      }
+    }
+  ]
+}

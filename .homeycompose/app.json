@@ -1,21 +1,22 @@
 {
   "id": "com.nerskogen.homey-panasonic-comfortcloud",
-  "version": "1.0.0",
-  "compatibility": ">=12.4.0",
-  "sdk": 3,
-  "platforms": [
-    "local"
-  ],
   "name": {
-    "en": "Panasonic Comfortcloud"
+    "en": "Panasonic Comfort Cloud"
   },
   "description": {
-    "en": "Unofficial Homey integration for Panasonic Comfort Cloud devices (ACs & heat pumps). Auto-discovers devices, full control, and live monitoring"
+    "en": "Unofficial Homey integration for Panasonic Comfort Cloud — discover, control and monitor your Panasonic air conditioners and heat pumps directly from Homey."
   },
   "category": [
     "climate"
   ],
+  "platforms": [
+    "local"
+  ],
+  "version": "1.0.0",
+  "compatibility": ">=12.4.0",
+  "sdk": 3,
   "permissions": [],
+  "brandColor": "#00658f",
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
@@ -24,5 +25,14 @@
   "author": {
     "name": "Kristoffer Nerskogen Helle",
     "email": "kristoffer@nerskogen.com"
+  },
+  "contributing": {
+    "owners": [
+      "nerskogen"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nerskogen/homey-panasonic-comfortcloud"
   }
 }

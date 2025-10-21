@@ -1,0 +1,26 @@
+{
+  "id": "set_swing_mode",
+  "title": {
+    "en": "Set swing mode"
+  },
+  "titleFormatted": {
+    "en": "Set [[device]] swing mode to [[mode]]"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=panasonic-ac"
+    },
+    {
+      "name": "mode",
+      "type": "enum",
+      "values": [
+        "off",
+        "vertical",
+        "horizontal",
+        "both"
+      ]
+    }
+  ]
+}

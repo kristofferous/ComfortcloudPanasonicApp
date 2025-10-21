@@ -1,0 +1,27 @@
+{
+  "id": "set_mode",
+  "title": {
+    "en": "Set thermostat mode"
+  },
+  "titleFormatted": {
+    "en": "Set [[device]] mode to [[mode]]"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=panasonic-ac"
+    },
+    {
+      "name": "mode",
+      "type": "enum",
+      "values": [
+        "auto",
+        "cool",
+        "heat",
+        "dry",
+        "fan"
+      ]
+    }
+  ]
+}
