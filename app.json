@@ -1,3 +1,428 @@
 {
-  "_comment": "This file is generated. Please edit .homeycompose/app.json instead."
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.nerskogen.homey-panasonic-comfortcloud",
+  "name": {
+    "en": "Panasonic Comfort Cloud"
+  },
+  "description": {
+    "en": "Unofficial Homey integration for Panasonic Comfort Cloud — discover, control and monitor your Panasonic air conditioners and heat pumps directly from Homey."
+  },
+  "category": [
+    "climate"
+  ],
+  "platforms": [
+    "local"
+  ],
+  "version": "1.0.0",
+  "compatibility": ">=12.4.0",
+  "sdk": 3,
+  "permissions": [],
+  "brandColor": "#00658f",
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Kristoffer Nerskogen Helle",
+    "email": "kristoffer@nerskogen.com"
+  },
+  "contributing": {
+    "owners": [
+      "nerskogen"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nerskogen/homey-panasonic-comfortcloud"
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "state_changed",
+        "title": {
+          "en": "State changed"
+        },
+        "titleFormatted": {
+          "en": "[[device]] changed [[property]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=panasonic-ac"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "property",
+            "type": "string",
+            "title": {
+              "en": "Property"
+            }
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "title": {
+              "en": "New value"
+            }
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "energy_above",
+        "title": {
+          "en": "Energy consumption is above"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=panasonic-ac"
+          },
+          {
+            "name": "energy",
+            "type": "number",
+            "min": 0,
+            "max": 500,
+            "step": 0.1,
+            "label": {
+              "en": "Energy (kWh)"
+            }
+          }
+        ]
+      },
+      {
+        "id": "is_on",
+        "title": {
+          "en": "Device is on"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=panasonic-ac"
+          }
+        ]
+      },
+      {
+        "id": "mode_is",
+        "title": {
+          "en": "Mode is"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=panasonic-ac"
+          },
+          {
+            "name": "mode",
+            "type": "enum",
+            "values": [
+              "auto",
+              "cool",
+              "heat",
+              "dry",
+              "fan"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "temperature_above",
+        "title": {
+          "en": "Indoor temperature is above"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=panasonic-ac"
+          },
+          {
+            "name": "temperature",
+            "type": "number",
+            "min": -20,
+            "max": 60,
+            "step": 0.5,
+            "label": {
+              "en": "Temperature (°C)"
+            }
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "set_fan_speed",
+        "title": {
+          "en": "Set fan speed"
+        },
+        "titleFormatted": {
+          "en": "Set [[device]] fan speed to [[speed]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=panasonic-ac"
+          },
+          {
+            "name": "speed",
+            "type": "enum",
+            "values": [
+              "auto",
+              "low",
+              "medium",
+              "high"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_mode",
+        "title": {
+          "en": "Set thermostat mode"
+        },
+        "titleFormatted": {
+          "en": "Set [[device]] mode to [[mode]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=panasonic-ac"
+          },
+          {
+            "name": "mode",
+            "type": "enum",
+            "values": [
+              "auto",
+              "cool",
+              "heat",
+              "dry",
+              "fan"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_power",
+        "title": {
+          "en": "Set power"
+        },
+        "titleFormatted": {
+          "en": "Set [[device]] to [[state]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=panasonic-ac"
+          },
+          {
+            "name": "state",
+            "type": "boolean",
+            "title": {
+              "en": "Turn on"
+            }
+          }
+        ]
+      },
+      {
+        "id": "set_swing_mode",
+        "title": {
+          "en": "Set swing mode"
+        },
+        "titleFormatted": {
+          "en": "Set [[device]] swing mode to [[mode]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=panasonic-ac"
+          },
+          {
+            "name": "mode",
+            "type": "enum",
+            "values": [
+              "off",
+              "vertical",
+              "horizontal",
+              "both"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "set_target_temperature",
+        "title": {
+          "en": "Set target temperature"
+        },
+        "titleFormatted": {
+          "en": "Set [[device]] target temperature to [[temperature]] °C"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=panasonic-ac"
+          },
+          {
+            "name": "temperature",
+            "type": "number",
+            "min": 10,
+            "max": 30,
+            "step": 0.5,
+            "label": {
+              "en": "Temperature (°C)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "id": "panasonic-ac",
+      "name": {
+        "en": "Panasonic Comfort Cloud"
+      },
+      "class": "thermostat",
+      "capabilities": [
+        "onoff",
+        "target_temperature",
+        "measure_temperature",
+        "thermostat_mode"
+      ],
+      "images": {
+        "small": "/drivers/panasonic-ac/assets/icon.svg",
+        "large": "/drivers/panasonic-ac/assets/icon.svg"
+      },
+      "pair": [
+        {
+          "id": "login",
+          "template": "login"
+        },
+        {
+          "id": "devices",
+          "template": "devices"
+        }
+      ]
+    }
+  ],
+  "capabilities": {
+    "alarm_connection": {
+      "type": "boolean",
+      "title": {
+        "en": "Connection alarm"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": false
+    },
+    "alarm_filter": {
+      "type": "boolean",
+      "title": {
+        "en": "Filter alarm"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": false
+    },
+    "fan_speed": {
+      "type": "enum",
+      "title": {
+        "en": "Fan speed"
+      },
+      "uiComponent": "picker",
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "auto",
+          "title": {
+            "en": "Auto"
+          }
+        },
+        {
+          "id": "low",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "medium",
+          "title": {
+            "en": "Medium"
+          }
+        },
+        {
+          "id": "high",
+          "title": {
+            "en": "High"
+          }
+        }
+      ]
+    },
+    "measure_temperature.outdoor": {
+      "type": "number",
+      "title": {
+        "en": "Outdoor temperature"
+      },
+      "units": {
+        "en": "°C"
+      },
+      "decimals": 1,
+      "min": -40,
+      "max": 60,
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "chartType": "line"
+    },
+    "swing_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Swing mode"
+      },
+      "uiComponent": "picker",
+      "getable": true,
+      "setable": true,
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "vertical",
+          "title": {
+            "en": "Vertical"
+          }
+        },
+        {
+          "id": "horizontal",
+          "title": {
+            "en": "Horizontal"
+          }
+        },
+        {
+          "id": "both",
+          "title": {
+            "en": "Vertical & horizontal"
+          }
+        }
+      ]
+    }
+  }
 }
