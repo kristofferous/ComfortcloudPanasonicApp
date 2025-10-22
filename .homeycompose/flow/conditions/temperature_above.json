@@ -4,13 +4,16 @@
     "en": "Indoor temperature is above"
   },
   "titleFormatted": {
-    "en": "Indoor temperature of [[device]] is above [[temperature]] °C"
+    "en": "Selected device's indoor temperature is above [[temperature]] °C"
   },
   "args": [
     {
       "name": "device",
       "type": "device",
-      "filter": "driver_id=panasonic-ac"
+      "filter": "driver_id=panasonic-ac",
+      "title": {
+        "en": "Device"
+      }
     },
     {
       "name": "temperature",

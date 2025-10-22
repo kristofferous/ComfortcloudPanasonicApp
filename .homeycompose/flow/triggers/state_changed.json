@@ -4,13 +4,16 @@
     "en": "State changed"
   },
   "titleFormatted": {
-    "en": "[[device]] changed [[property]] to [[value]]"
+    "en": "Selected device property [[property]] changed to [[value]]"
   },
   "args": [
     {
       "name": "device",
       "type": "device",
-      "filter": "driver_id=panasonic-ac"
+      "filter": "driver_id=panasonic-ac",
+      "title": {
+        "en": "Device"
+      }
     }
   ],
   "tokens": [

@@ -4,13 +4,16 @@
     "en": "Set target temperature"
   },
   "titleFormatted": {
-    "en": "Set target temperature of [[device]] to [[temperature]] °C"
+    "en": "Set the selected device's target temperature to [[temperature]] °C"
   },
   "args": [
     {
       "name": "device",
       "type": "device",
-      "filter": "driver_id=panasonic-ac"
+      "filter": "driver_id=panasonic-ac",
+      "title": {
+        "en": "Device"
+      }
     },
     {
       "name": "temperature",
