@@ -4,13 +4,16 @@
     "en": "Set swing mode"
   },
   "titleFormatted": {
-    "en": "Set swing mode of [[device]] to [[mode]]"
+    "en": "Set the selected device's swing mode to [[mode]]"
   },
   "args": [
     {
       "name": "device",
       "type": "device",
-      "filter": "driver_id=panasonic-ac"
+      "filter": "driver_id=panasonic-ac",
+      "title": {
+        "en": "Device"
+      }
     },
     {
       "name": "mode",

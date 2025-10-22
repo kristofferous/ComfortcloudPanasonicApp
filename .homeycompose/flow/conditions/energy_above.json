@@ -4,13 +4,16 @@
     "en": "Energy consumption is above"
   },
   "titleFormatted": {
-    "en": "Energy consumption of [[device]] is above [[energy]] kWh"
+    "en": "Selected device's energy consumption is above [[energy]] kWh"
   },
   "args": [
     {
       "name": "device",
       "type": "device",
-      "filter": "driver_id=panasonic-ac"
+      "filter": "driver_id=panasonic-ac",
+      "title": {
+        "en": "Device"
+      }
     },
     {
       "name": "energy",

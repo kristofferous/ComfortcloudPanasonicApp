@@ -44,13 +44,16 @@
           "en": "State changed"
         },
         "titleFormatted": {
-          "en": "[[device]] changed [[property]] to [[value]]"
+          "en": "Selected device property [[property]] changed to [[value]]"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=panasonic-ac"
+            "filter": "driver_id=panasonic-ac",
+            "title": {
+              "en": "Device"
+            }
           }
         ],
         "tokens": [
@@ -78,13 +81,16 @@
           "en": "Energy consumption is above"
         },
         "titleFormatted": {
-          "en": "Energy consumption of [[device]] is above [[energy]] kWh"
+          "en": "Selected device's energy consumption is above [[energy]] kWh"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=panasonic-ac"
+            "filter": "driver_id=panasonic-ac",
+            "title": {
+              "en": "Device"
+            }
           },
           {
             "name": "energy",
@@ -104,13 +110,16 @@
           "en": "Device is on"
         },
         "titleFormatted": {
-          "en": "Is [[device]] turned on?"
+          "en": "Is the selected device turned on?"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=panasonic-ac"
+            "filter": "driver_id=panasonic-ac",
+            "title": {
+              "en": "Device"
+            }
           }
         ]
       },
@@ -120,13 +129,16 @@
           "en": "Mode is"
         },
         "titleFormatted": {
-          "en": "Mode of [[device]] is [[mode]]"
+          "en": "Selected device's mode is [[mode]]"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=panasonic-ac"
+            "filter": "driver_id=panasonic-ac",
+            "title": {
+              "en": "Device"
+            }
           },
           {
             "name": "mode",
@@ -172,13 +184,16 @@
           "en": "Indoor temperature is above"
         },
         "titleFormatted": {
-          "en": "Indoor temperature of [[device]] is above [[temperature]] °C"
+          "en": "Selected device's indoor temperature is above [[temperature]] °C"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=panasonic-ac"
+            "filter": "driver_id=panasonic-ac",
+            "title": {
+              "en": "Device"
+            }
           },
           {
             "name": "temperature",
@@ -200,13 +215,16 @@
           "en": "Set fan speed"
         },
         "titleFormatted": {
-          "en": "Set fan speed of [[device]] to [[speed]]"
+          "en": "Set the selected device's fan speed to [[speed]]"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=panasonic-ac"
+            "filter": "driver_id=panasonic-ac",
+            "title": {
+              "en": "Device"
+            }
           },
           {
             "name": "speed",
@@ -246,13 +264,16 @@
           "en": "Set thermostat mode"
         },
         "titleFormatted": {
-          "en": "Set mode of [[device]] to [[mode]]"
+          "en": "Set the selected device's mode to [[mode]]"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=panasonic-ac"
+            "filter": "driver_id=panasonic-ac",
+            "title": {
+              "en": "Device"
+            }
           },
           {
             "name": "mode",
@@ -298,13 +319,16 @@
           "en": "Set power"
         },
         "titleFormatted": {
-          "en": "Set power of [[device]] to [[state]]"
+          "en": "Set the selected device's power to [[state]]"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=panasonic-ac"
+            "filter": "driver_id=panasonic-ac",
+            "title": {
+              "en": "Device"
+            }
           },
           {
             "name": "state",
@@ -332,13 +356,16 @@
           "en": "Set swing mode"
         },
         "titleFormatted": {
-          "en": "Set swing mode of [[device]] to [[mode]]"
+          "en": "Set the selected device's swing mode to [[mode]]"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=panasonic-ac"
+            "filter": "driver_id=panasonic-ac",
+            "title": {
+              "en": "Device"
+            }
           },
           {
             "name": "mode",
@@ -378,13 +405,16 @@
           "en": "Set target temperature"
         },
         "titleFormatted": {
-          "en": "Set target temperature of [[device]] to [[temperature]] °C"
+          "en": "Set the selected device's target temperature to [[temperature]] °C"
         },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=panasonic-ac"
+            "filter": "driver_id=panasonic-ac",
+            "title": {
+              "en": "Device"
+            }
           },
           {
             "name": "temperature",
@@ -491,14 +521,11 @@
         "en": "Outdoor temperature"
       },
       "units": "°C",
-      "decimals": 1,
-      "min": -40,
-      "max": 60,
-      "uiComponent": "sensor",
       "getable": true,
       "setable": false,
-      "insights": true,
-      "chartType": "line"
+      "min": -40,
+      "max": 60,
+      "decimals": 1
     },
     "swing_mode": {
       "type": "enum",

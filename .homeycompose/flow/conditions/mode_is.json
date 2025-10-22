@@ -4,13 +4,16 @@
     "en": "Mode is"
   },
   "titleFormatted": {
-    "en": "Mode of [[device]] is [[mode]]"
+    "en": "Selected device's mode is [[mode]]"
   },
   "args": [
     {
       "name": "device",
       "type": "device",
-      "filter": "driver_id=panasonic-ac"
+      "filter": "driver_id=panasonic-ac",
+      "title": {
+        "en": "Device"
+      }
     },
     {
       "name": "mode",
