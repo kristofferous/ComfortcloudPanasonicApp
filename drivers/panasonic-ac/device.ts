@@ -201,7 +201,7 @@ export class PanasonicAcDevice extends Homey.Device {
     }
 
     if (scope === 'extended') {
-      await updateCapability('measure_temperature.outdoor', state.outdoorTemperature);
+      await updateCapability('measure_temperature_outdoor', state.outdoorTemperature);
       await updateCapability('measure_power', state.powerConsumption);
       await updateCapability('meter_power', state.energyConsumption);
       await updateCapability('alarm_filter', state.filterAlarm ?? false);
@@ -244,7 +244,7 @@ export class PanasonicAcDevice extends Homey.Device {
     compare('target_temperature', current.targetTemperature, previous.targetTemperature);
     compare('measure_temperature', current.indoorTemperature, previous.indoorTemperature);
     compare('measure_humidity', current.indoorHumidity, previous.indoorHumidity);
-    compare('measure_temperature.outdoor', current.outdoorTemperature, previous.outdoorTemperature);
+    compare('measure_temperature_outdoor', current.outdoorTemperature, previous.outdoorTemperature);
     compare('measure_power', current.powerConsumption, previous.powerConsumption);
     compare('meter_power', current.energyConsumption, previous.energyConsumption);
     compare('fan_speed', current.fanSpeed, previous.fanSpeed);

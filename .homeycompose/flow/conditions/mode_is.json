@@ -3,6 +3,9 @@
   "title": {
     "en": "Mode is"
   },
+  "titleFormatted": {
+    "en": "Mode of [[device]] is [[mode]]"
+  },
   "args": [
     {
       "name": "device",

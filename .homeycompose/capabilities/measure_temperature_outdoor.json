@@ -1,0 +1,12 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Outdoor temperature"
+  },
+  "units": "°C",
+  "getable": true,
+  "setable": false,
+  "min": -40,
+  "max": 60,
+  "decimals": 1
+}

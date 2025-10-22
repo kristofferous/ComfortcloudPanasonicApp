@@ -44,7 +44,7 @@
           "en": "State changed"
         },
         "titleFormatted": {
-          "en": "[[device]] changed [[property]]"
+          "en": "[[device]] changed [[property]] to [[value]]"
         },
         "args": [
           {
@@ -77,6 +77,9 @@
         "title": {
           "en": "Energy consumption is above"
         },
+        "titleFormatted": {
+          "en": "Energy consumption of [[device]] is above [[energy]] kWh"
+        },
         "args": [
           {
             "name": "device",
@@ -100,6 +103,9 @@
         "title": {
           "en": "Device is on"
         },
+        "titleFormatted": {
+          "en": "Is [[device]] turned on?"
+        },
         "args": [
           {
             "name": "device",
@@ -112,6 +118,9 @@
         "id": "mode_is",
         "title": {
           "en": "Mode is"
+        },
+        "titleFormatted": {
+          "en": "Mode of [[device]] is [[mode]]"
         },
         "args": [
           {
@@ -162,6 +171,9 @@
         "title": {
           "en": "Indoor temperature is above"
         },
+        "titleFormatted": {
+          "en": "Indoor temperature of [[device]] is above [[temperature]] °C"
+        },
         "args": [
           {
             "name": "device",
@@ -188,7 +200,7 @@
           "en": "Set fan speed"
         },
         "titleFormatted": {
-          "en": "Set [[device]] fan speed to [[speed]]"
+          "en": "Set fan speed of [[device]] to [[speed]]"
         },
         "args": [
           {
@@ -234,7 +246,7 @@
           "en": "Set thermostat mode"
         },
         "titleFormatted": {
-          "en": "Set [[device]] mode to [[mode]]"
+          "en": "Set mode of [[device]] to [[mode]]"
         },
         "args": [
           {
@@ -286,7 +298,7 @@
           "en": "Set power"
         },
         "titleFormatted": {
-          "en": "Set [[device]] to [[state]]"
+          "en": "Set power of [[device]] to [[state]]"
         },
         "args": [
           {
@@ -320,7 +332,7 @@
           "en": "Set swing mode"
         },
         "titleFormatted": {
-          "en": "Set [[device]] swing mode to [[mode]]"
+          "en": "Set swing mode of [[device]] to [[mode]]"
         },
         "args": [
           {
@@ -366,7 +378,7 @@
           "en": "Set target temperature"
         },
         "titleFormatted": {
-          "en": "Set [[device]] target temperature to [[temperature]] °C"
+          "en": "Set target temperature of [[device]] to [[temperature]] °C"
         },
         "args": [
           {
@@ -473,14 +485,12 @@
         }
       ]
     },
-    "measure_temperature.outdoor": {
+    "measure_temperature_outdoor": {
       "type": "number",
       "title": {
         "en": "Outdoor temperature"
       },
-      "units": {
-        "en": "°C"
-      },
+      "units": "°C",
       "decimals": 1,
       "min": -40,
       "max": 60,

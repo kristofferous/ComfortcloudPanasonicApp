@@ -4,7 +4,7 @@
     "en": "Set thermostat mode"
   },
   "titleFormatted": {
-    "en": "Set [[device]] mode to [[mode]]"
+    "en": "Set mode of [[device]] to [[mode]]"
   },
   "args": [
     {

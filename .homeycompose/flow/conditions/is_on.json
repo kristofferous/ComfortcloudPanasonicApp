@@ -3,6 +3,9 @@
   "title": {
     "en": "Device is on"
   },
+  "titleFormatted": {
+    "en": "Is [[device]] turned on?"
+  },
   "args": [
     {
       "name": "device",

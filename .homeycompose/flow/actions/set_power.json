@@ -4,7 +4,7 @@
     "en": "Set power"
   },
   "titleFormatted": {
-    "en": "Set [[device]] to [[state]]"
+    "en": "Set power of [[device]] to [[state]]"
   },
   "args": [
     {
