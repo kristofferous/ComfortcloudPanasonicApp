@@ -109,7 +109,7 @@ export class PollScheduler {
       task.lastRun = Date.now();
       await task.run();
     } catch (error) {
-      this.logger?.('Poll task "%s" failed: %s', task.id, (error as Error).message);
+      this.logger?.('[PollScheduler.ts] Poll task "%s" failed: %s', task.id, (error as Error).message);
     } finally {
       if (this.running) {
         this.schedule(task, false);

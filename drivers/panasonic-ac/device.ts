@@ -30,18 +30,36 @@ export class PanasonicAcDevice extends Homey.Device {
     const app = this.homey.app as PanasonicComfortCloudApp;
     this.client = app.createClient();
 
-    const storedFeatures = (await this.getStoreValue('features')) as ComfortDeviceFeatures | null;
-    if (storedFeatures) {
-      this.features = { ...this.features, ...storedFeatures };
+    try {
+      const storedFeatures = (await this.getStoreValue('features')) as ComfortDeviceFeatures | null;
+      if (storedFeatures) {
+        this.features = { ...this.features, ...storedFeatures };
+      }
+    } catch (error) {
+      this.error('[device.ts] onInit -> getStoreValue("features") failed: %s', (error as Error).message);
     }
 
-    await this.ensureCapabilities();
+    try {
+      await this.ensureCapabilities();
+    } catch (error) {
+      this.error('[device.ts] onInit -> ensureCapabilities failed: %s', (error as Error).message);
+      throw error;
+    }
     this.registerCapabilityListeners();
-    this.configurePolling();
+    try {
+      this.configurePolling();
+    } catch (error) {
+      this.error('[device.ts] onInit -> configurePolling failed: %s', (error as Error).message);
+      throw error;
+    }
 
     this.homey.settings.on('set', (key) => {
       if (key === 'pollEssential' || key === 'pollEnvironment' || key === 'pollExtended') {
-        this.configurePolling();
+        try {
+          this.configurePolling();
+        } catch (error) {
+          this.error('[device.ts] settings listener -> configurePolling failed: %s', (error as Error).message);
+        }
       }
     });
 
@@ -59,7 +77,12 @@ export class PanasonicAcDevice extends Homey.Device {
   }
 
   async handleDriverRescan(): Promise<void> {
-    await this.ensureCapabilities();
+    try {
+      await this.ensureCapabilities();
+    } catch (error) {
+      this.error('[device.ts] handleDriverRescan -> ensureCapabilities failed: %s', (error as Error).message);
+      throw error;
+    }
     await this.pollOnce('extended');
   }
 
@@ -99,57 +122,95 @@ export class PanasonicAcDevice extends Homey.Device {
     const current = this.getCapabilities();
     for (const capability of plan.capabilities) {
       if (!current.includes(capability)) {
-        await this.addCapability(capability);
+        try {
+          await this.addCapability(capability);
+        } catch (error) {
+          this.error(
+            '[device.ts] ensureCapabilities -> addCapability("%s") failed: %s',
+            capability,
+            (error as Error).message,
+          );
+          throw error;
+        }
       }
     }
 
     for (const capability of current) {
       if (!plan.capabilities.includes(capability)) {
-        await this.removeCapability(capability);
+        try {
+          await this.removeCapability(capability);
+        } catch (error) {
+          this.error(
+            '[device.ts] ensureCapabilities -> removeCapability("%s") failed: %s',
+            capability,
+            (error as Error).message,
+          );
+          throw error;
+        }
       }
     }
 
     if (this.hasCapability('target_temperature')) {
-      await this.setCapabilityOptions('target_temperature', {
-        min: this.features.minTemperature ?? 16,
-        max: this.features.maxTemperature ?? 30,
-        step: 0.5,
-      });
+      try {
+        await this.setCapabilityOptions('target_temperature', {
+          min: this.features.minTemperature ?? 16,
+          max: this.features.maxTemperature ?? 30,
+          step: 0.5,
+        });
+      } catch (error) {
+        this.error('[device.ts] ensureCapabilities -> setCapabilityOptions failed: %s', (error as Error).message);
+        throw error;
+      }
     }
   }
 
   private configurePolling(): void {
-    const app = this.homey.app as PanasonicComfortCloudApp;
-    const intervals = app.getPollIntervals();
+    try {
+      const app = this.homey.app as PanasonicComfortCloudApp;
+      const intervals = app.getPollIntervals();
 
-    this.pollScheduler?.stop();
-    this.pollScheduler = new PollScheduler({
-      logger: (message, ...args) => this.log(message, ...args),
-      jitter: 2000,
-    });
+      this.pollScheduler?.stop();
+      this.pollScheduler = new PollScheduler({
+        logger: (message, ...args) => this.log(message, ...args),
+        jitter: 2000,
+      });
 
-    this.pollScheduler.register({
-      id: 'essential',
-      interval: intervals.essential,
-      run: () => this.pollOnce('essential'),
-      immediate: true,
-    });
+      const scheduler = this.pollScheduler;
+      const registerTask = (task: { id: string; interval: number; run: () => Promise<void>; immediate: boolean }) => {
+        try {
+          scheduler.register(task);
+        } catch (error) {
+          this.error('[device.ts] configurePolling -> register "%s" failed: %s', task.id, (error as Error).message);
+          throw error;
+        }
+      };
 
-    this.pollScheduler.register({
-      id: 'environment',
-      interval: intervals.environment,
-      run: () => this.pollOnce('environment'),
-      immediate: true,
-    });
+      registerTask({
+        id: 'essential',
+        interval: intervals.essential,
+        run: () => this.pollOnce('essential'),
+        immediate: true,
+      });
 
-    this.pollScheduler.register({
-      id: 'extended',
-      interval: intervals.extended,
-      run: () => this.pollOnce('extended'),
-      immediate: true,
-    });
+      registerTask({
+        id: 'environment',
+        interval: intervals.environment,
+        run: () => this.pollOnce('environment'),
+        immediate: true,
+      });
 
-    this.pollScheduler.start();
+      registerTask({
+        id: 'extended',
+        interval: intervals.extended,
+        run: () => this.pollOnce('extended'),
+        immediate: true,
+      });
+
+      scheduler.start();
+    } catch (error) {
+      this.error('[device.ts] configurePolling failed: %s', (error as Error).message);
+      throw error;
+    }
   }
 
   private async pollOnce(scope: 'essential' | 'environment' | 'extended'): Promise<void> {
@@ -161,7 +222,12 @@ export class PanasonicAcDevice extends Homey.Device {
       const state = await this.client.readState(this.getDeviceId());
       await this.applyState(state, scope);
     } catch (error) {
-      this.error('Failed to poll device %s: %s', this.getName(), (error as Error).message);
+      this.error(
+        '[device.ts] pollOnce("%s") failed for "%s": %s',
+        scope,
+        this.getName(),
+        (error as Error).message,
+      );
     } finally {
       this.polling = false;
     }
@@ -181,7 +247,11 @@ export class PanasonicAcDevice extends Homey.Device {
       try {
         await this.setCapabilityValue(capability, value);
       } catch (error) {
-        this.error('Failed to update capability %s: %s', capability, (error as Error).message);
+        this.error(
+          '[device.ts] applyState -> setCapabilityValue("%s") failed: %s',
+          capability,
+          (error as Error).message,
+        );
       }
     };
 
@@ -209,18 +279,26 @@ export class PanasonicAcDevice extends Homey.Device {
     }
 
     if (state.minTemperature || state.maxTemperature) {
-      await this.setCapabilityOptions('target_temperature', {
-        min: state.minTemperature ?? this.features.minTemperature ?? 16,
-        max: state.maxTemperature ?? this.features.maxTemperature ?? 30,
-        step: 0.5,
-      });
+      try {
+        await this.setCapabilityOptions('target_temperature', {
+          min: state.minTemperature ?? this.features.minTemperature ?? 16,
+          max: state.maxTemperature ?? this.features.maxTemperature ?? 30,
+          step: 0.5,
+        });
+      } catch (error) {
+        this.error('[device.ts] applyState -> setCapabilityOptions failed: %s', (error as Error).message);
+      }
       if (state.minTemperature !== undefined) {
         this.features.minTemperature = state.minTemperature;
       }
       if (state.maxTemperature !== undefined) {
         this.features.maxTemperature = state.maxTemperature;
       }
-      await this.setStoreValue('features', this.features);
+      try {
+        await this.setStoreValue('features', this.features);
+      } catch (error) {
+        this.error('[device.ts] applyState -> setStoreValue("features") failed: %s', (error as Error).message);
+      }
     }
 
     this.triggerStateChanges(previous, state);
@@ -296,7 +374,11 @@ export class PanasonicAcDevice extends Homey.Device {
       const updated = await this.client.writeState(this.getDeviceId(), patch);
       await this.applyState(updated, 'extended');
     } catch (error) {
-      this.error('Failed to send update: %s', (error as Error).message);
+      this.error(
+        '[device.ts] sendPatch -> writeState failed for "%s": %s',
+        this.getName(),
+        (error as Error).message,
+      );
       if (this.lastState) {
         await this.applyState(this.lastState, 'extended');
       }
