@@ -93,7 +93,7 @@ export class ComfortCloudClient implements Provider {
 
     const tokens = this.parseTokens(response);
     await this.setTokens(tokens);
-    this.log('Authenticated Comfort Cloud account %s', tokens.userId);
+    this.logDebug('Authenticated Comfort Cloud account %s', tokens.userId);
     return tokens;
   }
 
@@ -111,7 +111,7 @@ export class ComfortCloudClient implements Provider {
 
     const nextTokens = this.parseTokens(response, tokens);
     await this.setTokens(nextTokens);
-    this.log('Refreshed Comfort Cloud token');
+    this.logDebug('Refreshed Comfort Cloud token');
     return nextTokens;
   }
 
@@ -173,17 +173,25 @@ export class ComfortCloudClient implements Provider {
       } catch (error) {
         const axiosError = error as AxiosError;
         const status = axiosError.response?.status;
-        this.log('Comfort Cloud request failed (%s) %s', status ?? 'unknown', axiosError.message);
+        const method = String(config.method ?? 'GET').toUpperCase();
+        const url = String(config.url ?? 'unknown');
+        this.logError(
+          'Request %s %s failed (%s): %s',
+          method,
+          url,
+          status ?? 'unknown',
+          axiosError.message,
+        );
 
         if (status === 401 && requiresAuth && attempt < 2) {
-          this.log('Comfort Cloud request unauthorized, refreshing token');
+          this.logDebug('Request %s %s unauthorized, attempting token refresh', method, url);
           await this.handleUnauthorized();
           return this.request<T>(config, { requiresAuth, attempt: attempt + 1 });
         }
 
         if ((status === 429 || (status ?? 0) >= 500) && attempt < 4) {
           const backoff = Math.min(1000 * Math.pow(2, attempt), 15000);
-          this.log('Comfort Cloud rate limited, retrying in %dms', backoff);
+          this.logDebug('Request %s %s rate limited, retrying in %dms', method, url, backoff);
           await delay(backoff);
           return this.request<T>(config, { requiresAuth, attempt: attempt + 1 });
         }
@@ -250,10 +258,18 @@ export class ComfortCloudClient implements Provider {
     await this.refresh(tokens);
   }
 
-  private log(message: string, ...args: unknown[]): void {
+  private logDebug(message: string, ...args: unknown[]): void {
     if (this.debug) {
-      this.logger?.(message, ...args);
+      this.logger?.(this.formatLog(message), ...args);
     }
+  }
+
+  private logError(message: string, ...args: unknown[]): void {
+    this.logger?.(this.formatLog(message), ...args);
+  }
+
+  private formatLog(message: string): string {
+    return `[ComfortCloudClient] ${message}`;
   }
 }
 

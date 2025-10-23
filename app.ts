@@ -1,6 +1,7 @@
 import Homey from 'homey';
 import ComfortCloudClient from './lib/panasonic/ComfortCloudClient';
 import RateLimiter from './lib/panasonic/RateLimiter';
+import SettingsTokenStore from './lib/homey/SettingsTokenStore';
 import { CredentialsClient, StorageCredentialsClient, TokenStore } from './lib/panasonic/Provider';
 import { PollIntervalConfig, AuthTokens } from './types';
 
@@ -9,7 +10,7 @@ interface StoredCredentials {
   password?: string;
 }
 
-type StorageManager = {
+type LegacyStorageManager = {
   getStore<T = unknown>(name: string): TokenStore<T>;
 };
 
@@ -41,13 +42,18 @@ export default class PanasonicComfortCloudApp extends Homey.App {
       logger: (message, ...args) => this.log(message, ...args),
     });
 
-    const storageManager = (this.homey as { storage?: StorageManager }).storage;
-    const tokenStore = this.resolveTokenStore<AuthTokens>(storageManager, 'comfortcloud.tokens');
-    this.credentialsClient = new StorageCredentialsClient(tokenStore);
-    this.credentialStore = this.resolveTokenStore<StoredCredentials>(
-      storageManager,
-      'comfortcloud.credentials',
+    const tokenStore = this.createPersistentTokenStore<AuthTokens>(
+      'comfortcloud.tokens',
+      this.isAuthTokens,
     );
+    await this.migrateLegacyStore('comfortcloud.tokens', tokenStore);
+    this.credentialsClient = new StorageCredentialsClient(tokenStore);
+
+    this.credentialStore = this.createPersistentTokenStore<StoredCredentials>(
+      'comfortcloud.credentials',
+      this.isStoredCredentials,
+    );
+    await this.migrateLegacyStore('comfortcloud.credentials', this.credentialStore);
 
     await this.bootstrapSettings();
 
@@ -56,7 +62,7 @@ export default class PanasonicComfortCloudApp extends Homey.App {
         await this.handleSettingChanged(key);
       } catch (error) {
         this.error(
-          'Failed to handle settings change for "%s": %s',
+          '[app.ts] handleSettingChanged("%s") failed: %s',
           key,
           (error as Error).message,
         );
@@ -84,11 +90,16 @@ export default class PanasonicComfortCloudApp extends Homey.App {
   }
 
   async setStoredCredentials(credentials: StoredCredentials): Promise<void> {
-    if (!credentials.email && !credentials.password) {
-      await this.credentialStore.unset();
-      return;
+    try {
+      if (!credentials.email && !credentials.password) {
+        await this.credentialStore.unset();
+        return;
+      }
+      await this.credentialStore.set(credentials);
+    } catch (error) {
+      this.error('[app.ts] setStoredCredentials failed: %s', (error as Error).message);
+      throw (error instanceof Error ? error : new Error(String(error)));
     }
-    await this.credentialStore.set(credentials);
   }
 
   getPollIntervals(): PollIntervalConfig {
@@ -151,11 +162,19 @@ export default class PanasonicComfortCloudApp extends Homey.App {
     if (typeof passwordValue === 'string' && passwordValue.length > 0) {
       next.password = passwordValue;
       setTimeout(() => {
-        this.homey.settings.set('accountPassword', '');
+        try {
+          this.homey.settings.set('accountPassword', '');
+        } catch (error) {
+          this.error('[app.ts] persistCredentials -> clear password failed: %s', (error as Error).message);
+        }
       }, 0);
     }
 
-    await this.setStoredCredentials(next);
+    try {
+      await this.setStoredCredentials(next);
+    } catch (error) {
+      this.error('[app.ts] persistCredentials -> setStoredCredentials failed: %s', (error as Error).message);
+    }
   }
 
   private async handleRescanRequest(): Promise<void> {
@@ -167,38 +186,92 @@ export default class PanasonicComfortCloudApp extends Homey.App {
       try {
         await driver.rescanDevices();
       } catch (error) {
-        this.error('Failed to rescan devices: %s', (error as Error).message);
+        this.error('[app.ts] handleRescanRequest -> rescanDevices failed: %s', (error as Error).message);
       }
     }
 
     // Reset the button state to avoid repeated triggers.
     setTimeout(() => {
-      this.homey.settings.unset('rescanDevices');
+      try {
+        this.homey.settings.unset('rescanDevices');
+      } catch (error) {
+        this.error('[app.ts] handleRescanRequest -> reset toggle failed: %s', (error as Error).message);
+      }
     }, 0);
   }
 
-  private resolveTokenStore<T>(
-    storageManager: StorageManager | undefined,
+  private createPersistentTokenStore<T>(
     name: string,
+    validate?: (value: unknown) => value is T,
   ): TokenStore<T> {
-    if (storageManager?.getStore) {
-      try {
-        return storageManager.getStore(name) as TokenStore<T>;
-      } catch (error) {
-        this.error(
-          'Failed to access Homey storage store "%s": %s. Falling back to in-memory storage.',
-          name,
-          (error as Error).message,
-        );
-      }
-    } else {
+    const settings = this.homey.settings;
+    if (!settings) {
       this.error(
-        'Homey storage manager is unavailable. Falling back to in-memory store for "%s". Values will not persist across app restarts.',
+        '[app.ts] createPersistentTokenStore("%s") unavailable: Homey settings manager missing. Falling back to in-memory store.',
         name,
       );
+      return createInMemoryTokenStore<T>();
     }
 
-    return createInMemoryTokenStore<T>();
+    return new SettingsTokenStore<T>({
+      settings,
+      key: name,
+      validate,
+      onError: (context, error) => {
+        this.error(
+          '[app.ts] SettingsTokenStore("%s").%s failed: %s',
+          name,
+          context,
+          (error instanceof Error ? error.message : String(error)),
+        );
+      },
+    });
+  }
+
+  private async migrateLegacyStore<T>(name: string, target: TokenStore<T>): Promise<void> {
+    const storageManager = (this.homey as { storage?: LegacyStorageManager }).storage;
+    if (!storageManager?.getStore) {
+      return;
+    }
+
+    try {
+      const legacyStore = storageManager.getStore<T>(name);
+      const value = await legacyStore.get();
+      if (value === null || value === undefined) {
+        return;
+      }
+
+      await target.set(value);
+      await legacyStore.unset();
+      this.log('[app.ts] Migrated legacy storage store "%s" to Homey settings', name);
+    } catch (error) {
+      this.error('[app.ts] migrateLegacyStore("%s") failed: %s', name, (error as Error).message);
+    }
+  }
+
+  private isAuthTokens(value: unknown): value is AuthTokens {
+    if (!value || typeof value !== 'object') {
+      return false;
+    }
+    const candidate = value as Partial<AuthTokens>;
+    return (
+      typeof candidate.accessToken === 'string' &&
+      typeof candidate.refreshToken === 'string' &&
+      typeof candidate.expiresAt === 'number' &&
+      typeof candidate.userId === 'string'
+    );
+  }
+
+  private isStoredCredentials(value: unknown): value is StoredCredentials {
+    if (!value || typeof value !== 'object') {
+      return false;
+    }
+    const candidate = value as StoredCredentials;
+    const emailValid =
+      candidate.email === undefined || typeof candidate.email === 'string';
+    const passwordValid =
+      candidate.password === undefined || typeof candidate.password === 'string';
+    return emailValid && passwordValid;
   }
 }
 

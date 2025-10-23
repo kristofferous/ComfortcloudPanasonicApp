@@ -26,7 +26,11 @@ export default class PanasonicAcDriver extends Homey.Driver {
         try {
           await device.handleDriverRescan();
         } catch (error) {
-          this.error('Failed to rescan device %s: %s', device.getName(), (error as Error).message);
+          this.error(
+            '[driver.ts] rescanDevices -> device "%s" failed: %s',
+            device.getName(),
+            (error as Error).message,
+          );
         }
       }),
     );
@@ -100,20 +104,43 @@ export default class PanasonicAcDriver extends Homey.Driver {
     });
 
     session.setHandler('login', async (credentials: ProviderLoginRequest) => {
-      const tokens = await client.login(credentials);
-      state.tokens = tokens;
-      const devices = await client.listDevices();
-      state.devices = devices;
+      const email = typeof credentials?.email === 'string' ? credentials.email.trim() : '';
+      const password = typeof credentials?.password === 'string' ? credentials.password : '';
+      if (!email || !password) {
+        throw new Error('Please provide both an email address and password.');
+      }
+
+      try {
+        const tokens = await client.login({ email, password });
+        state.tokens = tokens;
+      } catch (error) {
+        throw this.createPairingError('login', error);
+      }
+
+      try {
+        state.devices = await client.listDevices();
+      } catch (error) {
+        throw this.createPairingError('device discovery', error);
+      }
+
       return { success: true };
     });
 
     session.setHandler('list_devices', async () => {
       if (!state.tokens) {
-        throw new Error('Not authenticated');
+        this.error('[driver.ts] onPair list_devices called without session tokens');
+        throw new Error('Comfort Cloud login required before listing devices.');
       }
-      if (!state.devices) {
-        state.devices = await client.listDevices();
+
+      try {
+        if (!state.devices) {
+          state.devices = await client.listDevices();
+        }
+      } catch (error) {
+        throw this.createPairingError('device discovery', error);
       }
+
+      const tokens = state.tokens;
 
       return state.devices.map((device) => {
         const plan = buildCapabilityPlan(device);
@@ -126,13 +153,19 @@ export default class PanasonicAcDriver extends Homey.Driver {
             model: device.model ?? '',
           },
           store: {
-            tokens: state.tokens,
+            tokens,
             features: device.features,
           },
           capabilities: plan.capabilities,
         };
       });
     });
+  }
+
+  private createPairingError(step: string, error: unknown): Error {
+    const message = error instanceof Error ? error.message : String(error);
+    this.error('[driver.ts] onPair %s failed: %s', step, message);
+    return new Error(`Comfort Cloud ${step} failed: ${message}`);
   }
 }
 
