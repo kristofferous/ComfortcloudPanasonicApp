@@ -9,6 +9,26 @@ interface StoredCredentials {
   password?: string;
 }
 
+type StorageManager = {
+  getStore<T = unknown>(name: string): TokenStore<T>;
+};
+
+function createInMemoryTokenStore<T>(): TokenStore<T> {
+  let value: T | null = null;
+
+  return {
+    async get() {
+      return value;
+    },
+    async set(next: T) {
+      value = next;
+    },
+    async unset() {
+      value = null;
+    },
+  } satisfies TokenStore<T>;
+}
+
 export default class PanasonicComfortCloudApp extends Homey.App {
   private rateLimiter!: RateLimiter;
   private credentialsClient!: CredentialsClient;
@@ -21,15 +41,26 @@ export default class PanasonicComfortCloudApp extends Homey.App {
       logger: (message, ...args) => this.log(message, ...args),
     });
 
-    const storageManager = (this.homey as any).storage;
-    const tokenStore = storageManager.getStore('comfortcloud.tokens') as TokenStore<AuthTokens>;
+    const storageManager = (this.homey as { storage?: StorageManager }).storage;
+    const tokenStore = this.resolveTokenStore<AuthTokens>(storageManager, 'comfortcloud.tokens');
     this.credentialsClient = new StorageCredentialsClient(tokenStore);
-    this.credentialStore = storageManager.getStore('comfortcloud.credentials') as TokenStore<StoredCredentials>;
+    this.credentialStore = this.resolveTokenStore<StoredCredentials>(
+      storageManager,
+      'comfortcloud.credentials',
+    );
 
     await this.bootstrapSettings();
 
     this.homey.settings.on('set', async (key) => {
-      await this.handleSettingChanged(key);
+      try {
+        await this.handleSettingChanged(key);
+      } catch (error) {
+        this.error(
+          'Failed to handle settings change for "%s": %s',
+          key,
+          (error as Error).message,
+        );
+      }
     });
 
     this.log('Panasonic Comfort Cloud app initialized');
@@ -133,13 +164,41 @@ export default class PanasonicComfortCloudApp extends Homey.App {
     };
 
     if (driver?.rescanDevices) {
-      await driver.rescanDevices();
+      try {
+        await driver.rescanDevices();
+      } catch (error) {
+        this.error('Failed to rescan devices: %s', (error as Error).message);
+      }
     }
 
     // Reset the button state to avoid repeated triggers.
     setTimeout(() => {
       this.homey.settings.unset('rescanDevices');
     }, 0);
+  }
+
+  private resolveTokenStore<T>(
+    storageManager: StorageManager | undefined,
+    name: string,
+  ): TokenStore<T> {
+    if (storageManager?.getStore) {
+      try {
+        return storageManager.getStore(name) as TokenStore<T>;
+      } catch (error) {
+        this.error(
+          'Failed to access Homey storage store "%s": %s. Falling back to in-memory storage.',
+          name,
+          (error as Error).message,
+        );
+      }
+    } else {
+      this.error(
+        'Homey storage manager is unavailable. Falling back to in-memory store for "%s". Values will not persist across app restarts.',
+        name,
+      );
+    }
+
+    return createInMemoryTokenStore<T>();
   }
 }
 
