@@ -11,8 +11,8 @@
     "thermostat_mode"
   ],
   "images": {
-    "small": "/drivers/panasonic-ac/assets/icon.svg",
-    "large": "/drivers/panasonic-ac/assets/icon.svg"
+    "small": "/drivers/panasonic-ac/assets/icon-small.png",
+    "large": "/drivers/panasonic-ac/assets/icon-large.png"
   },
   "pair": [
     {
@@ -23,5 +23,6 @@
       "id": "devices",
       "template": "devices"
     }
-  ]
+  ],
+  "icon": "/drivers/panasonic-ac/assets/icon.svg"
 }

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Unofficial Homey integration for Panasonic Comfort Cloud — discover, control and monitor your Panasonic air conditioners and heat pumps directly from Homey.",
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "node ./scripts/build.js",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
     "test": "vitest run",
     "test:watch": "vitest"

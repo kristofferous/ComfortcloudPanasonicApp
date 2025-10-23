@@ -1,4 +1,6 @@
 import Homey from 'homey';
+import { readdir } from 'node:fs/promises';
+import path from 'node:path';
 import ComfortCloudClient from '../../lib/panasonic/ComfortCloudClient';
 import { buildCapabilityPlan } from '../../lib/panasonic/Mappers';
 import { ProviderLoginRequest, AuthTokens, ComfortDevice } from '../../types';
@@ -16,6 +18,7 @@ export default class PanasonicAcDriver extends Homey.Driver {
 
   async onInit(): Promise<void> {
     this.registerFlows();
+    await this.logPairAssets();
     this.log('Panasonic Comfort Cloud driver initialized');
   }
 
@@ -93,6 +96,7 @@ export default class PanasonicAcDriver extends Homey.Driver {
   }
 
   async onPair(session: Homey.Driver.PairSession): Promise<void> {
+    this.log('[driver.ts] Pair session started');
     const app = this.homey.app as PanasonicComfortCloudApp;
     const client = app.createClient();
     const state: PairSessionState = { client };
@@ -104,6 +108,7 @@ export default class PanasonicAcDriver extends Homey.Driver {
     });
 
     session.setHandler('login', async (credentials: ProviderLoginRequest) => {
+      this.log('[driver.ts] onPair login invoked');
       const email = typeof credentials?.email === 'string' ? credentials.email.trim() : '';
       const password = typeof credentials?.password === 'string' ? credentials.password : '';
       if (!email || !password) {
@@ -127,6 +132,7 @@ export default class PanasonicAcDriver extends Homey.Driver {
     });
 
     session.setHandler('list_devices', async () => {
+      this.log('[driver.ts] onPair list_devices invoked');
       if (!state.tokens) {
         this.error('[driver.ts] onPair list_devices called without session tokens');
         throw new Error('Comfort Cloud login required before listing devices.');
@@ -166,6 +172,20 @@ export default class PanasonicAcDriver extends Homey.Driver {
     const message = error instanceof Error ? error.message : String(error);
     this.error('[driver.ts] onPair %s failed: %s', step, message);
     return new Error(`Comfort Cloud ${step} failed: ${message}`);
+  }
+
+  private async logPairAssets(): Promise<void> {
+    const pairDir = path.join(__dirname, 'pair');
+    try {
+      const files = await readdir(pairDir);
+      this.log('[driver.ts] Pair views available in "%s": %s', pairDir, files.join(', ') || '(empty)');
+    } catch (error) {
+      this.error(
+        '[driver.ts] Failed to list pair assets in "%s": %s',
+        pairDir,
+        (error as Error).message,
+      );
+    }
   }
 }
 
